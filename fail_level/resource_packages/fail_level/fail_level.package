@@ -1,0 +1,11 @@
+mod = [
+	"fail_level"
+]
+
+package = [
+	"resource_packages/fail_level/fail_level"
+]
+
+lua = [
+	"scripts/mods/fail_level/*"
+]
