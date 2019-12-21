@@ -23,5 +23,5 @@ mod.do_restart = with_game_state(function(gm)
 end)
 
 mod:command("fail", mod:localize("fail_command_description"), mod.do_fail)
-mod:command("home", mod:localize("home_command_description"), mod.do_fail)
+mod:command("home", mod:localize("home_command_description"), mod.do_go_home)
 mod:command("restart", mod:localize("restart_command_description"), mod.do_restart)
