@@ -1,0 +1,11 @@
+mod = [
+	"show_potion_type"
+]
+
+package = [
+	"resource_packages/show_potion_type/show_potion_type"
+]
+
+lua = [
+	"scripts/mods/show_potion_type/*"
+]
