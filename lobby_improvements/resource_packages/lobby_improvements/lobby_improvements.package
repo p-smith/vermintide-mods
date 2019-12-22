@@ -1,0 +1,11 @@
+mod = [
+	"lobby_improvements"
+]
+
+package = [
+	"resource_packages/lobby_improvements/lobby_improvements"
+]
+
+lua = [
+	"scripts/mods/lobby_improvements/*"
+]
