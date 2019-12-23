@@ -1,14 +1,8 @@
 local mod = get_mod("lobby_improvements")
 
-mod.SETTINGS = {
-	SKIP_COUNTDOWN = "skip_preparation_countdown",
-	POPUP = "show_popup"
-}
-
 return {
-	name = "lobby_improvements",
-	description = mod:localize("mod_description"),
-	is_togglable = true,
+	name = "Lobby improvements",
+	is_togglable = false,
 	options = {
 		widgets = {
 			{
@@ -22,5 +16,5 @@ return {
 				default_value = false
 			}
 		}
-	  }
+	}
 }
