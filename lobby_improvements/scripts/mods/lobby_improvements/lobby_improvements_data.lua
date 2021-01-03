@@ -14,6 +14,11 @@ return {
 				setting_id    = mod.SETTINGS.POPUP,
 				type          = "checkbox",
 				default_value = false
+			},
+			{
+				setting_id    = mod.SETTINGS.TELEPORT_TO_HOST,
+				type          = "checkbox",
+				default_value = true
 			}
 		}
 	}

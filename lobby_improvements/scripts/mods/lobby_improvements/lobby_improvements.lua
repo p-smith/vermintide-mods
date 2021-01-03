@@ -694,3 +694,119 @@ mod:hook(LobbyItemsList, "update", function(func, self, dt, loading, ignore_game
 
     return
 end)
+
+--[[
+    Teleport
+]]
+
+local min_distance_for_teleport = 15
+
+local function is_player_near(pos, exclude_player)
+    local current_players = Managers.player:human_players()
+
+    for _,player in pairs(current_players) do
+        if player.peer_id ~= exclude_player then
+            local player_unit = player.player_unit
+
+            if player_unit and Unit.alive(player_unit) then
+                local status_extension = ScriptUnit.extension(player_unit, "status_system")
+
+                if status_extension then
+                    if not status_extension.is_disabled(status_extension) then
+                        local player_pos = POSITION_LOOKUP[player_unit]
+
+                        if Vector3.distance(pos, player_pos) < min_distance_for_teleport then
+                            return true
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    return false
+end
+
+local function is_teleport_available(player)
+    local player_unit = player.player_unit
+
+    if not player_unit or not Unit.alive(player_unit) then
+        return false
+    end
+
+    local status_extension = ScriptUnit.extension(player_unit, "status_system")
+
+    if not status_extension then
+        return false
+    end
+
+    return not status_extension.is_disabled(status_extension)
+end
+
+mod:hook(PlayerManager, "rpc_to_client_spawn_player", function(func, self, sender, local_player_id, profile_index, position, rotation, is_initial_spawn, ammo_melee_percent_int, ammo_ranged_percent_int, healthkit_id, potion_id, grenade_id)
+    func(self, sender, local_player_id, profile_index, position, rotation, is_initial_spawn, ammo_melee_percent_int, ammo_ranged_percent_int, healthkit_id, potion_id, grenade_id) 
+ 
+    if mod:get(mod.SETTINGS.TELEPORT_TO_HOST) then
+         local my_player = self:local_player()
+ 
+         if not my_player.is_server then
+             local level_key = Managers.state.game_mode.level_transition_handler:get_current_level_keys()
+ 
+             if level_key and level_key ~= "inn_level" then
+                 local cutscene_system = Managers.state.entity:system("cutscene_system")
+                 local active_cutscene = nil
+ 
+                 if cutscene_system then
+                     active_cutscene = cutscene_system.active_camera
+                 end
+ 
+                 if not active_cutscene then
+                     if not is_initial_spawn and not is_player_near(position, my_player.peer_id) then
+                         local current_players = self:human_players()
+                         local teleport_to_player = nil
+ 
+                         for _,player in pairs(current_players) do
+                             if player.peer_id == sender then
+                                 if is_teleport_available(player) then
+                                     teleport_to_player = player
+                                 end
+ 
+                                 break
+                             end
+                         end
+ 
+                         if not teleport_to_player then
+                             for _,player in pairs(current_players) do
+                                 if player.peer_id ~= sender and player.peer_id ~= my_player.peer_id then
+                                     if is_teleport_available(player) then
+                                         teleport_to_player = player
+                                         break
+                                     end
+                                 end
+                             end
+                         end
+ 
+                         if teleport_to_player then
+                             local tp_pos = POSITION_LOOKUP[teleport_to_player.player_unit]
+ 
+                             if tp_pos then
+                                 if is_teleport_available(my_player) then
+                                     local my_player_unit = my_player.player_unit
+                                     local locomotion_extension = ScriptUnit.extension(my_player_unit, "locomotion_system")
+ 
+                                     if locomotion_extension then
+                                         local distance_delta = math.floor(Vector3.distance(position, tp_pos))
+                                         --EchoConsole("Teleporting to player " .. Steam.user_name(teleport_to_player.peer_id) .. "... Distance: " .. tostring(distance_delta))
+                                         locomotion_extension.teleport_to(locomotion_extension, tp_pos)
+                                     end
+                                 end
+                             end
+                         end
+                     end
+                 end
+             end
+         end
+     end
+ 
+     return
+ end)
