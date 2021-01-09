@@ -1,0 +1,11 @@
+mod = [
+	"luck_and_dupe"
+]
+
+package = [
+	"resource_packages/luck_and_dupe/luck_and_dupe"
+]
+
+lua = [
+	"scripts/mods/luck_and_dupe/*"
+]
