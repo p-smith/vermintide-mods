@@ -1,0 +1,11 @@
+mod = [
+	"rat_climb_teleport_fix"
+]
+
+package = [
+	"resource_packages/rat_climb_teleport_fix/rat_climb_teleport_fix"
+]
+
+lua = [
+	"scripts/mods/rat_climb_teleport_fix/*"
+]
