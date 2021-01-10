@@ -80,7 +80,7 @@ end
 
 local interupting_action_data = {}
 
-mod:hook(WeaponUnitExtension, "start_action", function(func, self, action_name, sub_action_name, actions, t)
+mod:hook_origin(WeaponUnitExtension, "start_action", function(self, action_name, sub_action_name, actions, t)
 	local first_person_extension = ScriptUnit.extension(self.owner_unit, "first_person_system")
 	local current_action_settings = self.current_action_settings
 	local new_action = action_name
