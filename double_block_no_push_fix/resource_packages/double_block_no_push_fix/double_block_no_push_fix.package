@@ -1,0 +1,11 @@
+mod = [
+	"double_block_no_push_fix"
+]
+
+package = [
+	"resource_packages/double_block_no_push_fix/double_block_no_push_fix"
+]
+
+lua = [
+	"scripts/mods/double_block_no_push_fix/*"
+]
