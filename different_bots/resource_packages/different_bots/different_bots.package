@@ -1,0 +1,11 @@
+mod = [
+	"different_bots"
+]
+
+package = [
+	"resource_packages/different_bots/different_bots"
+]
+
+lua = [
+	"scripts/mods/different_bots/*"
+]
